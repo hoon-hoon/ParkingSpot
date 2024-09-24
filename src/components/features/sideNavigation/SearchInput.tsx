@@ -4,7 +4,7 @@ const SearchInput = () => {
       <img
         src="/images/search.svg"
         alt="searchIcon"
-        className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4"
+        className="absolute left-4 top-1/2 transform -translate-y-1/2 w-4 h-4"
       />
       <input
         type="text"
