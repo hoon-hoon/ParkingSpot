@@ -1,15 +1,15 @@
 import Map from "../components/features/map/Map";
+import SideNavigation from "../components/features/sideNavigation/SideNavigation";
 
 const HomePage = () => {
   return (
     <div className="flex h-screen">
       {/* 사이드 네비게이션 */}
-      <aside className="w-1/4 bg-gray-100 p-4 border-r">
-        사이드 네비게이션
-      </aside>
-
+      <div className="w-1/3 h-screen bg-white p-4">
+        <SideNavigation />
+      </div>
       {/* 메인 지도 영역 */}
-      <main className="w-3/4 bg-blue-100">
+      <main className="w-2/3 bg-blue-100">
         <Map />
       </main>
     </div>
