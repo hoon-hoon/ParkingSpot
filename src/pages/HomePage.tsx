@@ -1,3 +1,5 @@
+import Map from "../components/features/map/Map";
+
 const HomePage = () => {
   return (
     <div className="flex h-screen">
@@ -7,7 +9,9 @@ const HomePage = () => {
       </aside>
 
       {/* 메인 지도 영역 */}
-      <main className="w-3/4 bg-blue-100">지도</main>
+      <main className="w-3/4 bg-blue-100">
+        <Map />
+      </main>
     </div>
   );
 };
