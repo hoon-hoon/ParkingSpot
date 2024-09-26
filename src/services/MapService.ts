@@ -3,7 +3,7 @@ export const loadKakaoMap = (mapElementId: string) => {
     const script = document.createElement("script");
     const apiKey = import.meta.env.VITE_KAKAO_MAP_API_KEY;
 
-    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&autoload=false`;
+    script.src = `//dapi.kakao.com/v2/maps/sdk.js?appkey=${apiKey}&libraries=services&autoload=false`;
     script.async = true;
 
     script.onload = () => {
