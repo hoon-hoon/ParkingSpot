@@ -5,11 +5,13 @@ import { getDistrict } from "../../../utils/getDistrict";
 import { fetchParkingData } from "../../../services/parkingService";
 import { useParkingStore } from "../../../stores/parkingStore";
 import { filterParking } from "../../../utils/filterParking";
+import MapMarkers from "./MapMarkers";
 
 const Map = () => {
   const [mapInstance, setMapInstance] = useState<any>(null);
   const [district, setDistrict] = useState<string | null>(null); // 자치구 정보
   const { parkingData, setParkingData } = useParkingStore();
+  const [filteredParking, setFilteredParking] = useState<any[]>([]); // 필터링된 주차장 데이터
   const location = useLocation(); // 현재 위치 정보 (latitude, longitude)
 
   const seoulLocation = {
@@ -40,10 +42,9 @@ const Map = () => {
       }
     };
 
-    initializeMapAndDistrict(); // 처음 한 번만 실행
+    initializeMapAndDistrict();
   }, []);
 
-  // 주차장 데이터 불러오기 (한 번만 실행)
   useEffect(() => {
     const fetchAllParkingData = async () => {
       try {
@@ -60,14 +61,16 @@ const Map = () => {
     };
 
     if (!parkingData.length) {
-      fetchAllParkingData(); // 처음 한 번만 호출
+      fetchAllParkingData(); 
     }
   }, [setParkingData, parkingData]);
 
   // 자치구에 따라 주차장 필터링
   useEffect(() => {
     if (!district || parkingData.length === 0) return;
-    const filteredParking = filterParking(parkingData, district); // 주차장 데이터 필터링
+    const filteredParking = filterParking(parkingData, district);
+    setFilteredParking(filteredParking);
+
     console.log("필터링된 주차장:", filteredParking);
   }, [district, parkingData]);
 
@@ -75,6 +78,9 @@ const Map = () => {
     <div id="map" className="w-full h-screen">
       {!mapInstance && <p>Loading Map...</p>}
       {district && <p>현재 자치구: {district}</p>}
+      {mapInstance && filteredParking.length > 0 && (
+        <MapMarkers parkingData={filteredParking} mapInstance={mapInstance} />
+      )}
     </div>
   );
 };
