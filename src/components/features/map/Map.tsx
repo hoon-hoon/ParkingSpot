@@ -73,10 +73,29 @@ const Map = () => {
     console.log("필터링된 주차장:", filteredParking);
   }, [district, parkingData]);
 
+  const ClickUpdateLocBtn = () => {
+    if (mapInstance) {
+      const center = mapInstance.getCenter();
+      getDistrict(center.getLat(), center.getLng(), (districtName) => {
+        if (districtName) {
+          setDistrict(districtName);
+          console.log("새로운 자치구:", districtName);
+        }
+      });
+    }
+  };
+
   return (
-    <div id="map" className="w-full h-screen">
+    <div id="map" className="w-full h-screen relative">
       {!mapInstance && <p>Loading Map...</p>}
-      {district && <p>현재 자치구: {district}</p>}
+      <button
+        onClick={ClickUpdateLocBtn}
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-white text-primary font-bold py-2 px-4 rounded-xl shadow-lg hover:bg-gray-50 flex items-center"
+        style={{ zIndex: 9999 }}
+      >
+        <img src="/images/updateLoc.svg" className="w-5 h-5 mr-2" />현 지도에서
+        검색
+      </button>
       {mapInstance && filteredParking.length > 0 && (
         <MapMarkers parkingData={filteredParking} mapInstance={mapInstance} />
       )}
