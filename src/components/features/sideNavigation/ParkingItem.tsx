@@ -1,4 +1,4 @@
-import { SideNavigationParking } from "../../../types/parking";
+import { SideNavigationParking } from "@/types";
 
 const ParkingItem = ({ parking }: { parking: SideNavigationParking }) => {
   return (

@@ -1,5 +1,5 @@
-import Map from "../components/features/map/Map";
-import SideNavigation from "../components/features/sideNavigation/SideNavigation";
+import { Map } from "@/components/features/map";
+import { SideNavigation } from "@/components/features/sideNavigation";
 
 const HomePage = () => {
   return (

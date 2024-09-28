@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import ParkingItem from "./ParkingItem";
-import { SideNavigationParking } from "../../../types/parking";
+import { SideNavigationParking } from "@/types";
 
 const parkingData: SideNavigationParking[] = [
   {

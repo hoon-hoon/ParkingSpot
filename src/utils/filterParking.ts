@@ -1,5 +1,7 @@
-import { Parking } from "../types/parking";
+import { Parking } from "@/types";
 
-export const filterParking = (parkingData: Parking[], districtName: string) => {
+const filterParking = (parkingData: Parking[], districtName: string) => {
   return parkingData.filter((parking) => parking.ADDR.includes(districtName));
 };
+
+export default filterParking;

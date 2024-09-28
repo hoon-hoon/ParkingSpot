@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { useEffect, useState } from "react";
-import { Parking } from "../../../types/parking";
-import FavoriteBtn from "../../common/FavoriteBtn";
+import { Parking } from "@/types";
+import { FavoriteBtn } from "@/components/common";
 
 interface Props {
   mapInstance: any;

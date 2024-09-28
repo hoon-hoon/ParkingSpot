@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { loadKakaoMap } from "../../../services/MapService";
-import { useLocation } from "../../../hooks/useLocation";
-import { getDistrict } from "../../../utils/getDistrict";
-import { fetchParkingData } from "../../../services/parkingService";
-import { useParkingStore } from "../../../stores/parkingStore";
-import { filterParking } from "../../../utils/filterParking";
+import { loadKakaoMap } from "@/services";
 import MapMarkers from "./MapMarkers";
+import { fetchParkingData } from "@/services";
+import { filterParking, getDistrict } from "@/utils";
+import { useLocation } from "@/hooks";
+import { useParkingStore } from "@/stores";
 
 const Map = () => {
   const [mapInstance, setMapInstance] = useState<any>(null);
@@ -61,7 +60,7 @@ const Map = () => {
     };
 
     if (!parkingData.length) {
-      fetchAllParkingData(); 
+      fetchAllParkingData();
     }
   }, [setParkingData, parkingData]);
 

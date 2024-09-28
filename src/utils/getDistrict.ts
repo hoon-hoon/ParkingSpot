@@ -5,7 +5,7 @@ const extractDistrict = (addressName: string): string | null => {
   return splitAddress.length > 1 ? splitAddress[1] : null;
 };
 
-export const getDistrict = (
+const getDistrict = (
   latitude: number,
   longitude: number,
   callback: (districtName: string | null) => void
@@ -34,3 +34,5 @@ export const getDistrict = (
     }
   });
 };
+
+export default getDistrict;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Location } from "../types/location";
+import { Location } from "@/types";
 
-export const useLocation = () => {
+const useLocation = () => {
   const [location, setLocation] = useState<Location | null>(null);
 
   useEffect(() => {
@@ -19,3 +19,5 @@ export const useLocation = () => {
 
   return location;
 };
+
+export default useLocation;
