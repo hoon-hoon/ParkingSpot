@@ -13,16 +13,36 @@ const MapMarkers = ({ mapInstance, parkingData }: Props) => {
 
   useEffect(() => {
     const markers: any[] = [];
+    var imageSrc = "/images/parkingIcon.svg",
+      imageSize = new window.kakao.maps.Size(20, 20),
+      imageOption = { offset: new window.kakao.maps.Point(10, 20) };
+
+    // 지도 클릭 시 활성화된 오버레이 닫기
+    const handleMapClick = () => {
+      if (activeOverlay) {
+        activeOverlay.setMap(null);
+        setActiveOverlay(null);
+      }
+    };
+
+    window.kakao.maps.event.addListener(mapInstance, "click", handleMapClick);
 
     parkingData.forEach((parking) => {
-      const markerPosition = new window.kakao.maps.LatLng(
-        parking.LAT,
-        parking.LOT
-      );
+      var markerImage = new window.kakao.maps.MarkerImage(
+          imageSrc,
+          imageSize,
+          imageOption
+        ),
+        markerPosition = new window.kakao.maps.LatLng(parking.LAT, parking.LOT); // 마커가 표시될 위치입니다
+      // const markerPosition = new window.kakao.maps.LatLng(
+      //   parking.LAT,
+      //   parking.LOT
+      // );
 
       const marker = new window.kakao.maps.Marker({
         position: markerPosition,
         map: mapInstance,
+        image: markerImage,
       });
 
       const overlayContent = document.createElement("div");
@@ -71,6 +91,9 @@ const MapMarkers = ({ mapInstance, parkingData }: Props) => {
           const root = createRoot(favoriteBtn);
           root.render(<FavoriteBtn parkingCode={parking.PKLT_CD} />);
         }
+
+        var moveLatLon = new window.kakao.maps.LatLng(parking.LAT, parking.LOT);
+        mapInstance.panTo(moveLatLon);
       });
 
       overlayContent.addEventListener("mousedown", (e) => {
