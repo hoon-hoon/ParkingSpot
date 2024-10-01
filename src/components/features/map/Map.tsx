@@ -3,17 +3,16 @@ import { loadKakaoMap } from "@/services";
 import MapMarkers from "./MapMarkers";
 import { fetchParkingData } from "@/services";
 import { filterParking, getDistrict, calDistance } from "@/utils";
-import { useLocation } from "@/hooks";
+// import { useLocation } from "@/hooks";
 import { useParkingStore } from "@/stores";
 import groupParking from "@/utils/groupParking";
 
 const Map = () => {
   const [mapInstance, setMapInstance] = useState<any>(null);
   const [district, setDistrict] = useState<string | null>(null);
-  const { parkingData, setParkingData, sortedParking, setSortedParking } =
-    useParkingStore();
+  const { parkingData, setParkingData, setSortedParking } = useParkingStore();
   const [filteredParking, setFilteredParking] = useState<any[]>([]); // 필터링된 주차장 데이터
-  const location = useLocation(); // 현재 위치 정보 (latitude, longitude)
+  // const location = useLocation(); // 현재 위치 정보 (latitude, longitude)
   const [mapCenter, setMapCenter] = useState({
     latitude: 37.5665,
     longitude: 126.978,

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import ParkingItem from "./ParkingItem";
-import { SideNavigationParking } from "@/types";
 import { useParkingStore } from "@/stores";
 
 const ParkingList = () => {
