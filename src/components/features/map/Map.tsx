@@ -6,6 +6,7 @@ import { filterParking, getDistrict, calDistance } from "@/utils";
 // import { useLocation } from "@/hooks";
 import { useParkingStore } from "@/stores";
 import groupParking from "@/utils/groupParking";
+import FloatingBtnTab from "./FloatBtnTab";
 
 const Map = () => {
   const [mapInstance, setMapInstance] = useState<any>(null);
@@ -114,6 +115,7 @@ const Map = () => {
   return (
     <div id="map" className="w-full h-screen relative">
       {!mapInstance && <p>Loading Map...</p>}
+      <FloatingBtnTab />
       <button
         onClick={ClickUpdateLocBtn}
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-white text-primary font-bold py-2 px-4 rounded-xl shadow-lg hover:bg-gray-50 flex items-center"
