@@ -1,11 +1,15 @@
 import { create } from "zustand";
 
 interface ParkingStore {
-  parkingData: any[]; // 전체 주차장 데이터
+  parkingData: any[];
   setParkingData: (data: any[]) => void;
+  sortedParking: any[];
+  setSortedParking: (data: any[]) => void;
 }
 
 export const useParkingStore = create<ParkingStore>((set) => ({
   parkingData: [],
   setParkingData: (data) => set({ parkingData: data }),
+  sortedParking: [],
+  setSortedParking: (data) => set({ sortedParking: data }),
 }));

@@ -2,23 +2,28 @@ import { useEffect, useState } from "react";
 import { loadKakaoMap } from "@/services";
 import MapMarkers from "./MapMarkers";
 import { fetchParkingData } from "@/services";
-import { filterParking, getDistrict } from "@/utils";
+import { filterParking, getDistrict, calDistance } from "@/utils";
 import { useLocation } from "@/hooks";
 import { useParkingStore } from "@/stores";
+import groupParking from "@/utils/groupParking";
 
 const Map = () => {
   const [mapInstance, setMapInstance] = useState<any>(null);
-  const [district, setDistrict] = useState<string | null>(null); // 자치구 정보
-  const { parkingData, setParkingData } = useParkingStore();
+  const [district, setDistrict] = useState<string | null>(null);
+  const { parkingData, setParkingData, sortedParking, setSortedParking } =
+    useParkingStore();
   const [filteredParking, setFilteredParking] = useState<any[]>([]); // 필터링된 주차장 데이터
   const location = useLocation(); // 현재 위치 정보 (latitude, longitude)
+  const [mapCenter, setMapCenter] = useState({
+    latitude: 37.5665,
+    longitude: 126.978,
+  });
 
   const seoulLocation = {
     latitude: 37.5665,
     longitude: 126.978,
   };
 
-  // 지도 및 자치구 정보 초기화
   useEffect(() => {
     const initializeMapAndDistrict = async () => {
       try {
@@ -52,8 +57,9 @@ const Map = () => {
           const data = await fetchParkingData(i, i + 999);
           allParkingData = allParkingData.concat(data);
         }
-        setParkingData(allParkingData); // Zustand에 데이터 저장
-        console.log("전체 주차장 데이터:", allParkingData);
+
+        const groupedParkingData = groupParking(allParkingData); // 코드 같은 주차장(노상) 그룹화
+        setParkingData(groupedParkingData); // 상태에 저장
       } catch (error) {
         console.error("주차장 데이터를 가져오는 중 오류 발생:", error);
       }
@@ -68,14 +74,35 @@ const Map = () => {
   useEffect(() => {
     if (!district || parkingData.length === 0) return;
     const filteredParking = filterParking(parkingData, district);
-    setFilteredParking(filteredParking);
-
+    console.log("현재 위치:", mapCenter.latitude, mapCenter.longitude);
     console.log("필터링된 주차장:", filteredParking);
+
+    // 현재 위치 기준으로 가까운 순서로 정렬
+    const sortedParking = [...filteredParking].sort((a, b) => {
+      const distanceA = calDistance(
+        mapCenter.latitude,
+        mapCenter.longitude,
+        a.LAT,
+        a.LOT
+      );
+      const distanceB = calDistance(
+        mapCenter.latitude,
+        mapCenter.longitude,
+        b.LAT,
+        b.LOT
+      );
+      return distanceA - distanceB;
+    });
+    console.log("정렬된 주차장 목록:", sortedParking);
+    setSortedParking(sortedParking); // Zustand에 정렬된 데이터 저장
+    setFilteredParking(filteredParking);
   }, [district, parkingData]);
 
   const ClickUpdateLocBtn = () => {
     if (mapInstance) {
       const center = mapInstance.getCenter();
+      setMapCenter({ latitude: center.getLat(), longitude: center.getLng() }); // 지도 중심 좌표 업데이트
+
       getDistrict(center.getLat(), center.getLng(), (districtName) => {
         if (districtName) {
           setDistrict(districtName);

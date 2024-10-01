@@ -25,3 +25,15 @@ export type SideNavigationParking = Pick<
   Parking,
   "PKLT_CD" | "PKLT_NM" | "ADDR" | "PKLT_TYPE" | "PAY_YN_NM" | "BSC_PRK_CRG"
 >;
+
+export interface GroupedParking {
+  PKLT_CD: string;
+  PKLT_NM: string;
+  ADDR: string;
+  PKLT_TYPE: string;
+  PAY_YN_NM: string;
+  BSC_PRK_CRG: number;
+  items: Parking[]; // 그룹 내 주차장 데이터
+  TOTAL_CNT: number; // 총 자리 수
+  AVAILABLE_CNT: number; // 사용 가능한 자리 수
+}
