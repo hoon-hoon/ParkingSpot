@@ -1,2 +1,2 @@
-export { loadKakaoMap } from "./MapService";
-export { fetchParkingData } from "./ParkingService";
+export { loadKakaoMap } from "./loadKakaoMap";
+export { fetchParkingData } from "./fetchParkingData";
