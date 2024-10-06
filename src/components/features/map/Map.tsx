@@ -10,8 +10,13 @@ import FloatingBtnTab from "./FloatBtnTab";
 
 const Map = () => {
   const [mapInstance, setMapInstance] = useState<any>(null);
-  const [district, setDistrict] = useState<string | null>(null);
-  const { parkingData, setParkingData, setSortedParking } = useParkingStore();
+  const {
+    parkingData,
+    setParkingData,
+    setSortedParking,
+    district,
+    setDistrict,
+  } = useParkingStore();
   const [filteredParking, setFilteredParking] = useState<any[]>([]); // 필터링된 주차장 데이터
   // const location = useLocation(); // 현재 위치 정보 (latitude, longitude)
   const [mapCenter, setMapCenter] = useState({

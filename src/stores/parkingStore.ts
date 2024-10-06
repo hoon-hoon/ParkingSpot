@@ -5,6 +5,8 @@ interface ParkingStore {
   setParkingData: (data: any[]) => void;
   sortedParking: any[];
   setSortedParking: (data: any[]) => void;
+  district: string | null;
+  setDistrict: (district: string | null) => void;
 }
 
 export const useParkingStore = create<ParkingStore>((set) => ({
@@ -12,4 +14,6 @@ export const useParkingStore = create<ParkingStore>((set) => ({
   setParkingData: (data) => set({ parkingData: data }),
   sortedParking: [],
   setSortedParking: (data) => set({ sortedParking: data }),
+  district: null,
+  setDistrict: (district) => set({ district }),
 }));

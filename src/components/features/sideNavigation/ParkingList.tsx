@@ -3,7 +3,7 @@ import ParkingItem from "./ParkingItem";
 import { useParkingStore } from "@/stores";
 
 const ParkingList = () => {
-  const { sortedParking } = useParkingStore();
+  const { sortedParking, district } = useParkingStore();
   const [visibleData, setVisibleData] = useState(sortedParking.slice(0, 10)); // 처음 10개
   const [page, setPage] = useState(1); // 현재 페이지
   const observerRef = useRef(null); // 무한 스크롤용 ref
@@ -44,7 +44,9 @@ const ParkingList = () => {
 
   return (
     <div className="overflow-y-auto" style={{ height: "calc(100vh - 160px)" }}>
-      <p className="text-lg p-1 mb-2 font-medium">송파구 근처 주차장이에요.</p>
+      <p className="text-lg p-1 mb-2 font-medium">
+        {district} 근처 주차장이에요.
+      </p>
       {visibleData.map((parking) => (
         <ParkingItem key={parking.PKLT_CD} parking={parking} />
       ))}
