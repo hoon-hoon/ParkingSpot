@@ -24,6 +24,14 @@ const Map = () => {
     longitude: 126.978,
   });
 
+  const [activeFilters, setActiveFilters] = useState({
+    paid: false,
+    free: false,
+    onStreet: false,
+    offStreet: false,
+    available: false,
+  });
+
   const seoulLocation = {
     latitude: 37.5665,
     longitude: 126.978,
@@ -78,8 +86,9 @@ const Map = () => {
   // 자치구에 따라 주차장 필터링
   useEffect(() => {
     if (!district || parkingData.length === 0) return;
-    const filteredParking = filterParking(parkingData, district);
+    let filteredParking = filterParking(parkingData, district, activeFilters);
     console.log("현재 위치:", mapCenter.latitude, mapCenter.longitude);
+
     console.log("필터링된 주차장:", filteredParking);
 
     // 현재 위치 기준으로 가까운 순서로 정렬
@@ -101,7 +110,7 @@ const Map = () => {
     console.log("정렬된 주차장 목록:", sortedParking);
     setSortedParking(sortedParking); // Zustand에 정렬된 데이터 저장
     setFilteredParking(filteredParking);
-  }, [district, parkingData]);
+  }, [district, parkingData, activeFilters]);
 
   const ClickUpdateLocBtn = () => {
     if (mapInstance) {
@@ -120,7 +129,10 @@ const Map = () => {
   return (
     <div id="map" className="w-full h-screen relative">
       {!mapInstance && <p>Loading Map...</p>}
-      <FloatingBtnTab />
+      <FloatingBtnTab
+        activeFilters={activeFilters}
+        setActiveFilters={setActiveFilters}
+      />
       <button
         onClick={ClickUpdateLocBtn}
         className="absolute bottom-10 left-1/2 transform -translate-x-1/2 bg-white text-primary font-bold py-2 px-4 rounded-xl shadow-lg hover:bg-gray-50 flex items-center"

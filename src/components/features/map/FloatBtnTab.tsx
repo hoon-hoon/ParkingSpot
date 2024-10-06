@@ -1,15 +1,10 @@
 import { FloatingBtn } from "@/components";
-import { useState } from "react";
+import { FloatingBtnTabProps } from "@/types";
 
-const FloatingBtnTab = () => {
-  const [activeFilters, setActiveFilters] = useState({
-    paid: false,
-    free: false,
-    onStreet: false,
-    offStreet: false,
-    available: false,
-  });
-
+const FloatingBtnTab = ({
+  activeFilters,
+  setActiveFilters,
+}: FloatingBtnTabProps) => {
   const toggleFilter = (filterKey: keyof typeof activeFilters) => {
     setActiveFilters((prev) => ({
       ...prev,
