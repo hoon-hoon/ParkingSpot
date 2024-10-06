@@ -16,6 +16,7 @@ const Map = () => {
     setSortedParking,
     district,
     setDistrict,
+    selectedParking,
   } = useParkingStore();
   const [filteredParking, setFilteredParking] = useState<any[]>([]); // 필터링된 주차장 데이터
   // const location = useLocation(); // 현재 위치 정보 (latitude, longitude)
@@ -111,6 +112,16 @@ const Map = () => {
     setSortedParking(sortedParking); // Zustand에 정렬된 데이터 저장
     setFilteredParking(filteredParking);
   }, [district, parkingData, activeFilters]);
+
+  // 사이드네비게이션의 주차장 클릭 시 지도 이동
+  useEffect(() => {
+    if (selectedParking && mapInstance) {
+      const { LAT, LOT } = selectedParking;
+
+      const moveLatLon = new window.kakao.maps.LatLng(LAT, LOT);
+      mapInstance.panTo(moveLatLon);
+    }
+  }, [selectedParking]);
 
   const ClickUpdateLocBtn = () => {
     if (mapInstance) {

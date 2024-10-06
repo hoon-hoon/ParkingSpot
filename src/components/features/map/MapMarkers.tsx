@@ -1,7 +1,8 @@
 import { createRoot } from "react-dom/client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Parking } from "@/types";
 import { FavoriteBtn } from "@/components";
+import { useParkingStore } from "@/stores";
 
 interface Props {
   mapInstance: any;
@@ -10,9 +11,10 @@ interface Props {
 
 const MapMarkers = ({ mapInstance, parkingData }: Props) => {
   const [activeOverlay, setActiveOverlay] = useState<any>(null);
+  const { selectedParking } = useParkingStore(); // Zustand에서 클릭된 주차장 정보 가져오기
+  const markers = useRef<{ marker: any; overlay: any; PKLT_CD: string }[]>([]);
 
   useEffect(() => {
-    const markers: any[] = [];
     var imageSrc = "/images/parkingIcon.svg",
       imageSize = new window.kakao.maps.Size(20, 20),
       imageOption = { offset: new window.kakao.maps.Point(10, 20) };
@@ -33,11 +35,7 @@ const MapMarkers = ({ mapInstance, parkingData }: Props) => {
           imageSize,
           imageOption
         ),
-        markerPosition = new window.kakao.maps.LatLng(parking.LAT, parking.LOT); // 마커가 표시될 위치입니다
-      // const markerPosition = new window.kakao.maps.LatLng(
-      //   parking.LAT,
-      //   parking.LOT
-      // );
+        markerPosition = new window.kakao.maps.LatLng(parking.LAT, parking.LOT);
 
       const marker = new window.kakao.maps.Marker({
         position: markerPosition,
@@ -108,13 +106,38 @@ const MapMarkers = ({ mapInstance, parkingData }: Props) => {
       overlayContent.style.cursor = "default";
       overlayContent.style.borderRadius = "10px";
       overlayContent.style.padding = "16px";
-      markers.push(marker);
+      markers.current.push({ marker, overlay, PKLT_CD: parking.PKLT_CD });
     });
 
     return () => {
-      markers.forEach((marker) => marker.setMap(null));
+      markers.current.forEach(({ marker }) => marker.setMap(null));
+      markers.current = [];
     };
   }, [mapInstance, parkingData, activeOverlay]);
+
+  useEffect(() => {
+    console.log("selectedParking:", selectedParking);
+
+    if (selectedParking) {
+      const targetMarker = markers.current.find(
+        ({ PKLT_CD }) => PKLT_CD === selectedParking.PKLT_CD
+      );
+      if (targetMarker && targetMarker.overlay) {
+        console.log(targetMarker);
+        // 오버레이 열기
+        if (activeOverlay) {
+          activeOverlay.setMap(null);
+        }
+        targetMarker.overlay.setMap(mapInstance);
+        setActiveOverlay(targetMarker.overlay);
+        const moveLatLon = new window.kakao.maps.LatLng(
+          selectedParking.LAT,
+          selectedParking.LOT
+        );
+        mapInstance.panTo(moveLatLon);
+      }
+    }
+  }, [selectedParking]);
 
   return null;
 };
