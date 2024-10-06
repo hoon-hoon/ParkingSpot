@@ -4,7 +4,7 @@ import MapMarkers from "./MapMarkers";
 import { fetchParkingData } from "@/services";
 import { filterParking, getDistrict, calDistance } from "@/utils";
 // import { useLocation } from "@/hooks";
-import { useParkingStore } from "@/stores";
+import { useFavoriteStore, useParkingStore } from "@/stores";
 import groupParking from "@/utils/groupParking";
 import FloatingBtnTab from "./FloatBtnTab";
 
@@ -20,6 +20,7 @@ const Map = () => {
   } = useParkingStore();
   const [filteredParking, setFilteredParking] = useState<any[]>([]); // 필터링된 주차장 데이터
   // const location = useLocation(); // 현재 위치 정보 (latitude, longitude)
+  const { isFavoriteMode } = useFavoriteStore();
   const [mapCenter, setMapCenter] = useState({
     latitude: 37.5665,
     longitude: 126.978,
@@ -87,9 +88,20 @@ const Map = () => {
   // 자치구에 따라 주차장 필터링
   useEffect(() => {
     if (!district || parkingData.length === 0) return;
-    let filteredParking = filterParking(parkingData, district, activeFilters);
-    console.log("현재 위치:", mapCenter.latitude, mapCenter.longitude);
+    let filteredParking = parkingData;
 
+    if (isFavoriteMode) {
+      // 즐겨찾기 모드일 때 로컬 스토리지에서 즐겨찾기를 가져옴
+      const favoriteIds = JSON.parse(
+        localStorage.getItem("favoriteParkingLots") || "[]"
+      );
+      filteredParking = parkingData.filter((parking) =>
+        favoriteIds.includes(parking.PKLT_CD)
+      );
+    } else if (district) {
+      filteredParking = filterParking(parkingData, district, activeFilters);
+    }
+    console.log("현재 위치:", mapCenter.latitude, mapCenter.longitude);
     console.log("필터링된 주차장:", filteredParking);
 
     // 현재 위치 기준으로 가까운 순서로 정렬
@@ -111,7 +123,7 @@ const Map = () => {
     console.log("정렬된 주차장 목록:", sortedParking);
     setSortedParking(sortedParking); // Zustand에 정렬된 데이터 저장
     setFilteredParking(filteredParking);
-  }, [district, parkingData, activeFilters]);
+  }, [district, parkingData, activeFilters, isFavoriteMode]);
 
   // 사이드네비게이션의 주차장 클릭 시 지도 이동
   useEffect(() => {
