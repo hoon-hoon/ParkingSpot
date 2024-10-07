@@ -7,16 +7,15 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@": path.resolve(__dirname, "./src"), // 절대 경로 설정
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   server: {
     proxy: {
       "/api": {
-        target: "http://openapi.seoul.go.kr:8088", // HTTP로 제공되는 공공 API 주소
+        target: "http://openapi.seoul.go.kr:8088",
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""),
-        secure: false,
       },
     },
   },
