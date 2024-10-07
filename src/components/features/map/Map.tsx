@@ -7,6 +7,7 @@ import { filterParking, getDistrict, calDistance } from "@/utils";
 import { useFavoriteStore, useParkingStore } from "@/stores";
 import groupParking from "@/utils/groupParking";
 import FloatingBtnTab from "./FloatBtnTab";
+import { Spinner } from "@/components";
 
 const Map = () => {
   const [mapInstance, setMapInstance] = useState<any>(null);
@@ -25,6 +26,7 @@ const Map = () => {
     latitude: 37.5665,
     longitude: 126.978,
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [activeFilters, setActiveFilters] = useState({
     paid: false,
@@ -67,6 +69,7 @@ const Map = () => {
   useEffect(() => {
     const fetchAllParkingData = async () => {
       try {
+        setIsLoading(true);
         let allParkingData: any[] = [];
         for (let i = 1; i <= 1900; i += 1000) {
           const data = await fetchParkingData(i, i + 999);
@@ -77,6 +80,8 @@ const Map = () => {
         setParkingData(groupedParkingData); // 상태에 저장
       } catch (error) {
         console.error("주차장 데이터를 가져오는 중 오류 발생:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -164,7 +169,8 @@ const Map = () => {
         <img src="/images/updateLoc.svg" className="w-5 h-5 mr-2" />현 지도에서
         검색
       </button>
-      {mapInstance && filteredParking.length > 0 && (
+      {isLoading && <Spinner />}
+      {!isLoading && mapInstance && filteredParking.length > 0 && (
         <MapMarkers parkingData={filteredParking} mapInstance={mapInstance} />
       )}
     </div>
