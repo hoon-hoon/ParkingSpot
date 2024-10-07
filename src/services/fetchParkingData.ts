@@ -1,6 +1,7 @@
 export const fetchParkingData = async (start: number, end: number) => {
   const API_KEY = import.meta.env.VITE_PARKING_LOT_API_KEY;
-  const BASE_URL = `http://openapi.seoul.go.kr:8088/${API_KEY}/json/GetParkingInfo`;
+  // const BASE_URL = `http://openapi.seoul.go.kr:8088/${API_KEY}/json/GetParkingInfo`;
+  const BASE_URL = `/api/${API_KEY}/json/GetParkingInfo`;
 
   try {
     const response = await fetch(`${BASE_URL}/${start}/${end}/`);
