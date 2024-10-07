@@ -4,7 +4,9 @@ export const fetchParkingData = async (start: number, end: number) => {
   const BASE_URL = `/api/${API_KEY}/json/GetParkingInfo`;
 
   try {
-    const response = await fetch(`${BASE_URL}/${start}/${end}/`);
+    const response = await fetch(
+      `${BASE_URL}/${start}/${end}/${encodeURIComponent("중구")}`
+    );
     const data = await response.json();
 
     if (data.GetParkingInfo) {
